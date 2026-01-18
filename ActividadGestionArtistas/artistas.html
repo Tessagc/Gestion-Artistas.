@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gestión de Artistas</title>
+    <!-- Buenas prácticas: CSS externo -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Tu lógica aquí -->
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Gestión de Artistas</h1>
+        <!-- <nav aria-label="acciones rápidas">
+            <button type="button" id="btnNuevo">Nuevo artista</button>
+        </nav> -->
+    </header>
+
+    <main id="app" tabindex="-1">
+        <!-- Feedback accesible -->
+        <div id="avisos" role="status" aria-live="polite"></div>
+
+        <!-- Panel de formulario -->
+        <section aria-labelledby="titulo-form">
+            <h2 id="titulo-form">Alta / Edición</h2>
+
+            <form id="formArtista" novalidate>
+                <input type="hidden" id="id" name="id"/>
+
+                <div class="campo">
+                    <label for="nombre">Nombre <span aria-hidden="true">*</span></label>
+                    <input id="nombre" name="nombre" type="text" required minlength="2" class="dato"/>
+                </div>
+
+                <div class="campo">
+                    <label for="disciplina">Disciplina</label>
+                    <select id="disciplina" name="disciplina" required class="dato">
+                        <option value="">— Selecciona —</option>
+                        <option>Pintura</option>
+                        <option>Escultura</option>
+                        <option>Música</option>
+                        <option>Danza</option>
+                        <option>Fotografía</option>
+                        <option>Literatura</option>
+                        <option>Cine</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="pais">País</label>
+                    <input id="pais" name="pais" list="paises" required class="dato"/>
+                    <datalist id="paises">
+                        <option value="España"></option>
+                        <option value="Francia"></option>
+                        <option value="Italia"></option>
+                        <option value="México"></option>
+                        <option value="Argentina"></option>
+                        <option value="Brasil"></option>
+                        <option value="Alemania"></option>
+                        <option value="Noruega"></option>
+                        <option value="Estonia"></option>
+                        <option value="Venezuela"></option>
+                        <option value="Bolivia"></option>
+                    </datalist>
+                </div>
+
+                <div class="fila">
+                    <div class="campo">
+                        <label for="anioNacimiento">Año de nacimiento</label>
+                        <input id="anioNacimiento" class="dato" name="anioNacimiento" type="number" min="1850" max="2025" step="1"
+                            required placeholder="entre el año 1850 y 2025"/>
+                    </div>
+
+                    <div class="campo">
+                        <label for="puntuacion">Puntuación (0–10)</label>
+                        <input id="puntuacion" class="dato" name="puntuacion" type="range" min="0" max="10" step="1" value="5" />
+                        <output id="puntuacionOut" for="puntuacion">5</output>
+                    </div>
+
+                    <div class="campo check">
+                        <input id="activo" name="activo" type="checkbox" class="dato"/>
+                        <label for="activo">En activo</label>
+                    </div>
+                </div>
+
+                <div class="botones">
+                    <button type="submit" id="btnGuardar">Guardar</button>
+                    <button type="submit" id="btnActualizar" hidden>Actualizar</button>
+                    <button type="reset" id="btnCancelar">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Panel de listado y búsqueda -->
+        <section aria-labelledby="titulo-listado">
+            <h2 id="titulo-listado">Listado</h2>
+
+            <div class="toolbar">
+                <label for="buscar">Buscar</label>
+                <input id="buscar" type="search" placeholder="Nombre, país, disciplina…" />
+                <p id="mensajeBuscador"></p>
+            </div>
+
+            <table id="tablaArtistas">
+                <caption>Artistas registrados</caption>
+                <thead id="theadArtistas">
+                    <tr>
+                        <th scope="col" data-key="id" class="sortable">#</th>
+                        <th scope="col" data-key="nombre" class="sortable">Nombre</th>
+                        <th scope="col" data-key="disciplina" class="sortable">Disciplina</th>
+                        <th scope="col" data-key="pais" class="sortable">País</th>
+                        <th scope="col" data-key="anioNacimiento" class="sortable">Año</th>
+                        <th scope="col" data-key="puntuacion" class="sortable">Puntos</th>
+                        <th scope="col" data-key="activo" class="sortable">Activo</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyArtistas"></tbody>
+            </table>
+
+            <!-- Plantilla de fila -->
+            <template id="tplFilaArtista">
+                <tr>
+                    <th scope="row" data-field="id"></th>
+                    <th data-field="nombre"></th>
+                    <th data-field="disciplina"></th>
+                    <th data-field="pais"></th>
+                    <th data-field="anioNacimiento"></th>
+                    <th data-field="puntuacion"></th>
+                    <th data-field="activo"></th>
+                    <td>
+                        <button type="button" data-action="editar" aria-label="Editar artista">Editar</button>
+                        <button type="button" data-action="borrar" aria-label="Borrar artista">Borrar</button>
+                    </td>
+                </tr>
+            </template>
+        </section>
+
+        <!-- Semilla de datos opcional (útil para pruebas) -->
+    <!-- <script type="application/json" id="seed-artistas">
+      [
+        {"id":1,"nombre":"Frida Kahlo","disciplina":"Pintura","pais":"México","anioNacimiento":1907,"puntuacion":9,"activo":false},
+        {"id":2,"nombre":"Pablo Picasso","disciplina":"Pintura","pais":"España","anioNacimiento":1881,"puntuacion":10,"activo":false},
+        {"id":3,"nombre":"Martha Graham","disciplina":"Danza","pais":"EE.UU.","anioNacimiento":1894,"puntuacion":8,"activo":false}
+      ]
+    </script> -->
+    </main>
+
+    <footer>
+        <small>DIW/DWEC — Actividad DOM & Formularios. ©</small>
+    </footer>
+</body>
+
+</html>

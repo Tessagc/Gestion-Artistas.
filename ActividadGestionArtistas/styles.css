@@ -1,0 +1,224 @@
+:root{
+  --bg: #f7f7fb;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --fg: #1f2937;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --border: #e5e7eb;
+  --ok: #16a34a;
+  --danger: #dc2626;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+/* ====== Layout y tipografía ====== */
+header, main, footer {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+header {
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 { margin: .5rem 0 0; font-size: clamp(1.35rem, 1.1rem + 1vw, 1.8rem); }
+h2 { margin: 0 0 .75rem; font-size: 1.15rem; }
+
+main { display: grid; gap: 1rem; margin: .5rem 0 2rem; }
+
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* Avisos accesibles */
+#avisos {
+  min-height: 1.25rem;
+  margin: .25rem 0 .75rem;
+  color: var(--muted);
+}
+#avisos.ok { color: var(--ok); }
+#avisos.error { color: var(--danger); }
+
+/* ====== Navegación / Botón “Nuevo artista” ====== */
+nav button,
+button#btnNuevo {
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+nav button:hover,
+button#btnNuevo:hover { filter: brightness(1.05); }
+
+/* ====== Formulario ====== */
+form { display: grid; gap: .9rem; }
+
+.campo { display: grid; gap: .3rem; }
+.campo.check {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+label { font-weight: 600; }
+
+input[type="text"],
+input[type="search"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: .6rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+input[type="range"] { width: 100%; }
+#puntuacionOut { margin-left: .5rem; font-weight: 600; }
+
+.fila {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+.botones button[type="submit"]{
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.botones button[type="reset"]{
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--fg);
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* ====== Tabla ====== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: .6rem;
+}
+.toolbar input[type="search"]{
+  flex: 1;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+caption {
+  text-align: left;
+  padding: .6rem .75rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+thead th {
+  text-align: left;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem .75rem;
+  font-size: .95rem;
+}
+
+tbody td,
+tbody th[scope="row"] {
+  padding: .6rem .75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even){ background: #fafafa; }
+
+th.sortable { user-select: none; cursor: pointer; }
+th.sortable::after {
+  content: "↕";
+  margin-left: .3rem;
+  opacity: .5;
+  font-size: .85em;
+}
+th.sortable.sorted.asc::after  { content: "↑"; opacity: 1; }
+th.sortable.sorted.desc::after { content: "↓"; opacity: 1; }
+th.sortable:hover { background: #eef2ff; }
+
+/* Botones de acciones en la tabla */
+td > button {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: .35rem .55rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  cursor: pointer;
+  margin-right: .35rem;
+}
+td > button[data-action="editar"]:hover { filter: brightness(1.05); }
+td > button[data-action="borrar"]{
+  border-color: #f3d1d1;
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+td > button[data-action="borrar"]:hover{ filter: brightness(0.98); }
+
+/* ====== Accesibilidad / Foco ====== */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+button:disabled,
+[aria-disabled="true"]{
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* ====== Footer ====== */
+footer {
+  color: var(--muted);
+  padding: 1rem 0 2rem;
+  text-align: center;
+}
